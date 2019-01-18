@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="chen haojie" />
+
+<meta name="date" content="2019-01-12" />
+
+<title>Introduction to StatComp</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to StatComp</h1>
+<h4 class="author"><em>chen haojie</em></h4>
+<h4 class="date"><em>2019-01-12</em></h4>
+
+
+
+<div id="section" class="section level3">
+<h3>2018.09.14</h3>
+</div>
+<div id="question" class="section level2">
+<h2>Question</h2>
+<p>This is an R Markdown document. three examples.</p>
+</div>
+<div id="example1" class="section level2">
+<h2>Example1</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#the use of Data frama</span>
+x&lt;-<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)
+z&lt;-<span class="kw">c</span>(<span class="dv">80</span>,<span class="dv">85</span>,<span class="dv">92</span>,<span class="dv">76</span>,<span class="dv">61</span>,<span class="dv">95</span>,<span class="dv">83</span>)
+(LST&lt;-<span class="kw">list</span>(<span class="dt">class=</span>x,<span class="dt">sex=</span>y,<span class="dt">score=</span>z))
+LST[[<span class="dv">3</span>]]
+LST[[<span class="dv">2</span>]][<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]
+LST<span class="op">$</span>score
+LST<span class="op">$</span>sc
+(student&lt;-<span class="kw">data.frame</span>(x,y,z))
+student&lt;-<span class="kw">data.frame</span>(x,y,z)
+student
+<span class="co">#the use of ()</span>
+(student&lt;-<span class="kw">data.frame</span>(<span class="dt">class=</span>x,<span class="dt">sex=</span>y,<span class="dt">score=</span>z))
+student</code></pre></div>
+</div>
+<div id="example2" class="section level2">
+<h2>Example2</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">size=<span class="dv">1</span>;p=<span class="fl">0.5</span>
+<span class="kw">rbinom</span>(<span class="dv">10</span>,size,p)
+size=<span class="dv">10</span>;p=<span class="fl">0.5</span>
+<span class="kw">rbinom</span>(<span class="dv">20</span>,size,p)
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+p=<span class="fl">0.25</span>
+<span class="cf">for</span>( n <span class="cf">in</span> <span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">50</span>))
+{ x=<span class="kw">rbinom</span>(<span class="dv">100</span>,n,p)
+<span class="kw">hist</span>(x,<span class="dt">prob=</span>T,<span class="dt">main=</span><span class="kw">paste</span>(<span class="st">&quot;n =&quot;</span>,n))
+xvals=<span class="dv">0</span><span class="op">:</span>n
+<span class="kw">points</span>(xvals,<span class="kw">dbinom</span>(xvals,n,p),<span class="dt">type =</span> <span class="st">&quot;h&quot;</span>,<span class="dt">lwd=</span><span class="dv">3</span>)
+}
+(<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)))</code></pre></div>
+</div>
+<div id="example3" class="section level2">
+<h2>Example3</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#source(&quot;http://bioconductor.org/biocLite.R&quot;)</span>
+<span class="co">#biocLite(&quot;MASS&quot;)  </span>
+<span class="kw">library</span>(MASS)
+<span class="co">#install.packages(&quot;Mvnorm&quot;)</span>
+<span class="co">#library(Mvnorm)</span>
+sigma &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">2</span>),<span class="dt">ncol=</span><span class="dv">2</span>)
+x&lt;-<span class="kw">mvrnorm</span>(<span class="dt">n=</span><span class="dv">500</span>,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),sigma)
+<span class="kw">head</span>(x)
+<span class="kw">var</span>(x)
+<span class="kw">plot</span>(x)</code></pre></div>
+<div id="section-1" class="section level3">
+<h3>2018.09.21</h3>
+</div>
+</div>
+<div id="question1" class="section level2">
+<h2>Question1</h2>
+<p>A discrete random variable X has probability mass function</p>
+<pre><code> x    0   1   2   3   4
+p(x) 0.1 0.2 0.2 0.2 0.3</code></pre>
+<p>Use the inverse transform method to generate a random sample of size 1000 from the distribution of X. Construct a relative frequency table and compare the empirical with the theoretical probabilities. Repeat using the R sample function.</p>
+</div>
+<div id="answer1" class="section level2">
+<h2>Answer1</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">p&lt;-<span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span>)
+<span class="co"># creat the random numbers with sample function.</span>
+x&lt;-<span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>, <span class="dt">prob =</span> p)
+x    <span class="co">#output the random numbers</span>
+em.p&lt;-<span class="kw">table</span>(x)<span class="op">/</span><span class="dv">1000</span>    <span class="co">#calculate the empirical probabilities</span>
+em.th &lt;-<span class="st"> </span>em.p <span class="op">-</span><span class="st"> </span>p     <span class="co">#calculate the different value of empirical and theoretical probabilities</span>
+<span class="kw">rbind</span>(em.p,p,em.th)</code></pre></div>
+<p>From this table, we can compare the “em.p” and the “p”. P is the theoretical probabilities. em.p is the actual probabilities calculated by the random numbers created by sample function.</p>
+</div>
+<div id="question2" class="section level2">
+<h2>Question2</h2>
+<p>Write a function to generate a random sample of size n from the Beta(a,b) distribution by the acceptance-rejection method. Generate a random sample of size 1000 from the Beta(3,2) distribution. Graph the histogram of the sample with the theoretical Beta(3,2) density superimposed.</p>
+</div>
+<div id="answer2" class="section level2">
+<h2>Answer2</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beat.sl&lt;-<span class="cf">function</span>(n,a,b){
+k &lt;-<span class="st"> </span><span class="dv">0</span>   <span class="co">#counter for accepted </span>
+j &lt;-<span class="st"> </span><span class="dv">0</span>   <span class="co">#iterations</span>
+y &lt;-<span class="st"> </span><span class="kw">numeric</span>(n)
+<span class="cf">while</span> (k <span class="op">&lt;</span><span class="st"> </span>n) {
+u &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>)
+j &lt;-<span class="st"> </span>j <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+x &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>)   <span class="co">#random variate from g </span>
+<span class="cf">if</span> (x<span class="op">^</span>(a<span class="op">-</span><span class="dv">1</span>) <span class="op">*</span><span class="st"> </span>(<span class="dv">1</span><span class="op">-</span>x)<span class="op">^</span>(b<span class="op">-</span><span class="dv">1</span>) <span class="op">&gt;</span><span class="st"> </span>u) { 
+      <span class="co">#we accept x</span>
+      k &lt;-<span class="st"> </span>k <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+      y[k] &lt;-<span class="st"> </span>x
+} }
+<span class="kw">return</span>(y)
+}
+
+<span class="co">#par(mfrow=c(1,2))</span>
+
+d&lt;-<span class="kw">rbeta</span>(<span class="dv">1000</span>,<span class="dv">3</span>,<span class="dv">2</span>)
+<span class="kw">hist</span>(d,<span class="dt">prob =</span> <span class="ot">TRUE</span>)  <span class="co">#output the histogram of the rbeat function in system</span>
+
+c.sl&lt;-<span class="kw">beat.sl</span>(<span class="dv">1000</span>,<span class="dv">3</span>,<span class="dv">2</span>)
+<span class="kw">hist</span>(c.sl,<span class="dt">prob =</span> <span class="ot">TRUE</span>)  <span class="co">#output the histogram of the beat.sl function</span>
+
+y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, .<span class="dv">001</span>)
+i&lt;-<span class="kw">dbeta</span>(y,<span class="dv">3</span>,<span class="dv">2</span>)
+<span class="kw">lines</span>(y,i)  <span class="co">#compare the theoretical line with beat.sl function histogram</span></code></pre></div>
+</div>
+<div id="question3" class="section level2">
+<h2>Question3</h2>
+</div>
+<div id="answer3" class="section level2">
+<h2>Answer3</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="fl">1e3</span>; r &lt;-<span class="st"> </span><span class="dv">4</span>; beta &lt;-<span class="st"> </span><span class="dv">2</span>
+lambda &lt;-<span class="st"> </span><span class="kw">rgamma</span>(n, r, beta)  <span class="co"># creat the random numbers with rgamma function.</span>
+x &lt;-<span class="st"> </span><span class="kw">rexp</span>(n, lambda)    <span class="co"># creat the random numbers with rexp function.</span>
+<span class="kw">options</span>(<span class="dt">scipen=</span><span class="dv">100</span>, <span class="dt">digits =</span> <span class="dv">3</span>)
+x   <span class="co">#output the random numbers</span>
+<span class="kw">hist</span>(x,<span class="dt">prob =</span> <span class="ot">TRUE</span>)   <span class="co">#output the histogram of the random numbers</span></code></pre></div>
+<div id="section-2" class="section level3">
+<h3>2018.09.28</h3>
+</div>
+</div>
+<div id="question1-exercises-5.4" class="section level2">
+<h2>Question1-Exercises 5.4</h2>
+<p>Write a function to compute a Monte Carlo estimate of the Beta(3, 3) cdf, and use the function to estimate F (x) for x = 0.1, 0.2, . . . , 0.9. Compare the estimates with the values returned by the pbeta function in R.</p>
+</div>
+<div id="answer" class="section level2">
+<h2>Answer</h2>
+<p>Because <span class="math inline">\(\theta=\int_{0}^{x}\frac{1}{B(3,3)}t^{2}(1-t)^{2}dt=E_{Y}[\frac{x}{B(3,3)}Y^{2}(1-Y)^{2}]\)</span>,<span class="math inline">\(Y\sim U(0,x)\)</span> .</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">12</span>)
+beta_sl&lt;-<span class="cf">function</span>(x,m){
+  n&lt;-<span class="kw">length</span>(x)
+  theta&lt;-<span class="kw">numeric</span>(n)
+  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){
+  y&lt;-<span class="kw">runif</span>(m,<span class="dv">0</span>,x[i])   <span class="co">#sample Y</span>
+  theta[i]&lt;-<span class="kw">mean</span>(x[i]<span class="op">*</span>(y<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>((<span class="dv">1</span><span class="op">-</span>y)<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="kw">beta</span>(<span class="dv">3</span>,<span class="dv">3</span>))
+}
+  <span class="kw">return</span>(theta)
+}
+
+x&lt;-<span class="kw">seq</span>(<span class="fl">0.1</span>,<span class="fl">0.9</span>,<span class="fl">0.1</span>)
+m&lt;-<span class="dv">100000</span>
+
+x1&lt;-<span class="kw">beta_sl</span>(x,m)
+MC&lt;-<span class="kw">round</span>(x1,<span class="dv">6</span>)  <span class="co">#estime result</span>
+pBeta&lt;-<span class="kw">pbeta</span>(x,<span class="dv">3</span>,<span class="dv">3</span>)
+
+a&lt;-<span class="kw">rbind</span>(MC,pBeta)
+<span class="kw">rownames</span>(a)&lt;-<span class="kw">c</span>(<span class="st">&quot;MC&quot;</span>,<span class="st">&quot;pBeta&quot;</span>)
+knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(a),<span class="dt">col.names=</span>x,<span class="dt">caption =</span> <span class="st">&quot;Comparation&quot;</span>)   <span class="co">#output the result</span>
+
+<span class="kw">matplot</span>(x,<span class="kw">cbind</span>(MC,pBeta),<span class="dt">col=</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dt">pch=</span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))   <span class="co"># Compare the figure</span></code></pre></div>
+</div>
+<div id="question2-exercises-5.9" class="section level2">
+<h2>Question2-Exercises 5.9</h2>
+<p>The Rayleigh density [156, (18.76)] is <span class="math display">\[f(x)=\frac{x}{\sigma}e^{-x^2/(2\sigma^2)},x\ge0,\sigma&gt;0\]</span> Implement a function to generate samples from a Rayleigh(<span class="math inline">\(\sigma\)</span>) distribution, using antithetic variables. What is the percent reduction in variance of <span class="math inline">\(\frac{X+X^\prime}{2}\)</span> compared with <span class="math inline">\(\frac{X_{1}+X_{2}}{2}\)</span> for independent <span class="math inline">\(X_{1},X_{2}\)</span>?</p>
+</div>
+<div id="answer-1" class="section level2">
+<h2>Answer</h2>
+<p>The cdf:<span class="math inline">\(F(x)=1-e^{-\frac{x^2}{2\sigma^2}}\)</span>. It’s easy to generate samples using the inverse transform: <span class="math inline">\(X=F^-(U)=\sqrt{-2\sigma^2\ln(1-U)},U\sim U(0,1)\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SL&lt;-<span class="cf">function</span>(sigma,n,<span class="dt">antithetic =</span> <span class="ot">TRUE</span>){
+  u=<span class="kw">runif</span>(n<span class="op">/</span><span class="dv">2</span>)
+  <span class="cf">if</span>(<span class="op">!</span>antithetic) 
+    {v=<span class="kw">runif</span>(n<span class="op">/</span><span class="dv">2</span>)}<span class="cf">else</span>
+    {v=<span class="dv">1</span><span class="op">-</span>u}
+  u=<span class="kw">c</span>(u,v)
+  x=<span class="kw">sqrt</span>(<span class="op">-</span><span class="dv">2</span><span class="op">*</span>sigma<span class="op">^</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>(<span class="dv">1</span><span class="op">-</span>u))
+  <span class="kw">return</span>(x)
+ }
+ m&lt;-<span class="dv">1000</span>
+ <span class="kw">set.seed</span>(<span class="dv">123</span>)
+ MC1&lt;-<span class="kw">SL</span>(<span class="dv">2</span>,m)   <span class="co"># antithetic samples</span>
+ MC2&lt;-<span class="kw">SL</span>(<span class="dv">2</span>,m,<span class="dt">antithetic =</span> <span class="ot">FALSE</span>)    <span class="co">#independent samples</span>
+ <span class="kw">qqplot</span>(MC1,MC2)
+ a=<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">10</span>)
+ <span class="kw">lines</span>(a,a,<span class="dt">col=</span><span class="dv">2</span>)
+ 
+ b &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="kw">var</span>(MC1),<span class="kw">var</span>(MC2),<span class="dv">1</span><span class="op">-</span><span class="kw">var</span>(MC1)<span class="op">/</span><span class="kw">var</span>(MC2)),<span class="dv">1</span>,<span class="dv">3</span>)    <span class="co">#percent reduction in variance</span>
+ <span class="kw">colnames</span>(b)&lt;-<span class="kw">c</span>(<span class="st">&quot;Var(MC1)&quot;</span>,<span class="st">&quot;Var(MC2)&quot;</span>,<span class="st">&quot;1-Var(MC1)/Var(MC2)&quot;</span>)
+ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(b),<span class="dt">digits =</span><span class="dv">10</span>)</code></pre></div>
+</div>
+<div id="question3-exercise-5.13" class="section level2">
+<h2>Question3-Exercise 5.13</h2>
+<p>Find two importance functions <span class="math inline">\(f_{1}\)</span> and <span class="math inline">\(f_{2}\)</span> that are supported on <span class="math inline">\((1,\infty)\)</span> and are ??close?? to <span class="math display">\[g(x)=\frac{x^2}{\sqrt{2\pi}}e^{-x^2/2},x&gt;1\]</span> Which of your two importance functions should produce the smaller variance in estimating <span class="math display">\[\int_{1}^{\infty} \frac{x^2}{\sqrt{2\pi}}e^{-x^2/2}dx\]</span> by importance sampling? Explain.</p>
+</div>
+<div id="answer-2" class="section level2">
+<h2>Answer</h2>
+<p>We can choose <span class="math inline">\(f_1(x)=\frac{1}{ (1-\phi(-0.5)) \sqrt{ 2\pi}} e^{-(x-1.5)^2/2}\)</span>. we define <span class="math inline">\(f_2(x)=xe^{-\frac{x^2-1}{2}}\)</span>as the importance functions of <span class="math inline">\(g(x)\)</span>.Taking <span class="math inline">\(Z=X^2-1\)</span>, then <span class="math inline">\(f_2(z)=\frac{1}{2}e^{-\frac{z}{2}}\)</span>. Z is an exponential distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x=<span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">5</span>,<span class="fl">0.1</span>)
+g=<span class="cf">function</span>(x) x<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">2</span><span class="op">*</span>pi)<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>(x<span class="op">^</span><span class="dv">2</span>)<span class="op">/</span><span class="dv">2</span>)
+f1=<span class="cf">function</span>(x) <span class="kw">exp</span>(<span class="dv">1</span><span class="op">-</span>x)
+f2=<span class="cf">function</span>(x) x<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>((x<span class="op">^</span><span class="dv">2</span>)<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span>)
+gs&lt;-<span class="kw">c</span>(<span class="kw">expression</span>(<span class="kw">g</span>(x)<span class="op">==</span>x<span class="op">^</span><span class="dv">2</span><span class="op">*</span>e<span class="op">^</span>{<span class="op">-</span>x<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="dv">2</span>}<span class="op">/</span><span class="kw">sqrt</span>(<span class="dv">2</span><span class="op">*</span>pi)),<span class="kw">expression</span>(<span class="kw">f1</span>(x)<span class="op">==</span>e<span class="op">^</span>(<span class="dv">1</span><span class="op">-</span>x)),<span class="kw">expression</span>(<span class="kw">f2</span>(x)<span class="op">==</span>x<span class="op">*</span>e<span class="op">^</span>(<span class="op">-</span>(x<span class="op">^</span><span class="dv">2</span><span class="op">-</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span>)))
+
+<span class="kw">plot</span>(x,<span class="kw">g</span>(x),<span class="dt">col=</span><span class="dv">1</span>,<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>,<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), <span class="dt">lwd =</span> <span class="fl">0.25</span>,<span class="dt">main=</span><span class="st">'Result'</span>)
+<span class="kw">points</span>(x,<span class="kw">f1</span>(x),<span class="dt">col=</span><span class="dv">2</span>,<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">lty=</span><span class="dv">1</span>)
+<span class="kw">lines</span>(x,<span class="kw">f2</span>(x),<span class="dt">col=</span><span class="dv">3</span>,<span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">lty=</span><span class="dv">1</span>)
+<span class="kw">legend</span>(<span class="st">&quot;topright&quot;</span>,<span class="dt">inset=</span>.<span class="dv">05</span>,<span class="dt">legend=</span>gs,<span class="dt">lty=</span><span class="dv">1</span>,<span class="dt">col=</span><span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,<span class="dt">horiz=</span><span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="question4-exercise-5.14" class="section level2">
+<h2>Question4-Exercise 5.14</h2>
+<p>Obtain a Monte Carlo estimate of <span class="math display">\[\int_{1}^{\infty}\frac{x^2}{\sqrt{2\pi}}e^{-x^2/2}dx\]</span> by importance sampling.</p>
+</div>
+<div id="answer-3" class="section level2">
+<h2>Answer</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n=<span class="dv">1000</span>
+<span class="kw">set.seed</span>(<span class="dv">123</span>)
+X=<span class="kw">rnorm</span>(<span class="fl">1.5</span><span class="op">*</span>n,<span class="dt">mean=</span><span class="fl">1.5</span>,<span class="dt">sd=</span><span class="dv">1</span>)
+X=X[X<span class="op">&gt;</span><span class="dv">1</span>]
+X=X[<span class="dv">1</span><span class="op">:</span>n]
+theta1=<span class="kw">mean</span>(<span class="kw">g</span>(X)<span class="op">/</span><span class="kw">f1</span>(X))
+sd1=<span class="kw">sd</span>(<span class="kw">g</span>(X)<span class="op">/</span><span class="kw">f1</span>(X))<span class="op">/</span>n
+
+<span class="kw">set.seed</span>(<span class="dv">123</span>)
+Z=<span class="kw">rexp</span>(n,<span class="dt">rate=</span><span class="fl">0.5</span>)
+Y=<span class="kw">sqrt</span>(Z<span class="op">+</span><span class="dv">1</span>)
+theta2=<span class="kw">mean</span>(<span class="kw">g</span>(Y)<span class="op">/</span><span class="kw">f2</span>(Y))
+sd2=<span class="kw">sd</span>(<span class="kw">g</span>(Y)<span class="op">/</span><span class="kw">f2</span>(Y))<span class="op">/</span>n
+
+ b&lt;-<span class="kw">matrix</span>(<span class="kw">c</span>(theta1,sd1,theta2,sd2),<span class="dv">2</span>,<span class="dv">2</span>)
+ <span class="kw">colnames</span>(b)&lt;-<span class="kw">c</span>(<span class="st">&quot;f1&quot;</span>,<span class="st">&quot;f2&quot;</span>)
+ <span class="kw">rownames</span>(b)&lt;-<span class="kw">c</span>(<span class="st">&quot;Theta&quot;</span>,<span class="st">&quot;Se&quot;</span>)
+ knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">head</span>(b),<span class="dt">digits =</span><span class="dv">10</span> ,<span class="dt">caption =</span> <span class="st">&quot;Comparation&quot;</span>)</code></pre></div>
+<div id="section-3" class="section level3">
+<h3>2018.10.12</h3>
+</div>
+</div>
+<div id="question1-1" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li><p>Exercises 6.9</p>
+<p>Let <span class="math inline">\(X\)</span> be a non-negative random variable with <span class="math inline">\(\mu=E[X]&lt;\infty\)</span>. For a random sample <span class="math inline">\(x_1,\cdots,x_n\)</span> from the distribution of <span class="math inline">\(X\)</span> ,the Gini ratio is defined by <span class="math display">\[G=\frac{1}{2n^2\mu}\sum_{j=1}^{n}\sum_{i=1}^{n}|x_i-x_j|.\]</span> The Gini ratio is applied in economics to measure inequality in income distribution (see e.g. [163]). Note that <span class="math inline">\(G\)</span> can be written in terms of the order statistics <span class="math inline">\(x_{(i)}\)</span> as <span class="math display">\[G=\frac{1}{n^2\mu}\sum_{i=1}^{n}(2i-n-1)x_{(i)}.\]</span> If the mean is unknown,let <span class="math inline">\(\hat{G}\)</span> be the statistic <span class="math inline">\(G\)</span> with <span class="math inline">\(\mu\)</span> replacedby <span class="math inline">\(\bar{x}\)</span>. Estimate by simulation the mean, median and deciles of <span class="math inline">\(\hat{G}\)</span> if <span class="math inline">\(X\)</span> is standard lognormal. Repeat the procedure for the uniform distribution and Bernoulli(0.1). Also construct density histograms of the replicates in each case.</p></li>
+</ul>
+<div id="the-outcome-of-r-code" class="section level3">
+<h3>The outcome of R code:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">G&lt;-<span class="cf">function</span>(x){
+  n&lt;-<span class="kw">length</span>(x)
+  a&lt;-<span class="kw">seq</span>(<span class="dv">1</span><span class="op">-</span>n,n<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span>)
+  x.i&lt;-<span class="kw">sort</span>(x)
+  G.hat&lt;-<span class="kw">sum</span>(a<span class="op">*</span>x.i)<span class="op">/</span>(n<span class="op">*</span>n<span class="op">*</span><span class="kw">mean</span>(x))
+  <span class="kw">return</span>(G.hat)
+} <span class="co"># you can estimate a G.hat if there comes a sample</span>
+
+<span class="co">#set.seed(1)</span>
+<span class="co"># if X is standard lognormal</span>
+n=<span class="dv">500</span>
+m&lt;-<span class="dv">1000</span>
+G.hat1&lt;-<span class="kw">numeric</span>(m)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x&lt;-<span class="kw">rlnorm</span>(n) <span class="co"># then x is standard lognormal</span>
+  G.hat1[i]&lt;-<span class="kw">G</span>(x)
+}
+result1&lt;-<span class="kw">c</span>(<span class="kw">mean</span>(G.hat1),<span class="kw">quantile</span>(G.hat1,<span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>)))
+<span class="kw">names</span>(result1)&lt;-<span class="kw">c</span>(<span class="st">&quot;mean&quot;</span>,<span class="st">&quot;median&quot;</span>,<span class="st">&quot;deciles&quot;</span>)
+<span class="kw">print</span>(result1)
+<span class="kw">hist</span>(G.hat1,<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="kw">min</span>(G.hat1)<span class="op">-</span><span class="fl">0.01</span>,<span class="kw">max</span>(G.hat1)<span class="op">+</span><span class="fl">0.01</span>,<span class="fl">0.01</span>),<span class="dt">freq =</span>F,<span class="dt">main =</span> <span class="st">&quot;Histogram of G&quot;</span>,<span class="dt">xlab =</span> <span class="st">&quot;standard lognormal&quot;</span>)
+
+<span class="co"># if X is uniform</span>
+G.hat2&lt;-<span class="kw">numeric</span>(m)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x&lt;-<span class="kw">runif</span>(n) <span class="co"># then x is uniform</span>
+  G.hat2[i]&lt;-<span class="kw">G</span>(x)
+}
+result2&lt;-<span class="kw">c</span>(<span class="kw">mean</span>(G.hat2),<span class="kw">quantile</span>(G.hat2,<span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>)))
+<span class="kw">names</span>(result2)&lt;-<span class="kw">c</span>(<span class="st">&quot;mean&quot;</span>,<span class="st">&quot;median&quot;</span>,<span class="st">&quot;deciles&quot;</span>)
+<span class="kw">print</span>(result2)
+<span class="kw">hist</span>(G.hat2,<span class="dt">breaks =</span><span class="kw">seq</span>(<span class="kw">min</span>(G.hat2)<span class="op">-</span><span class="fl">0.01</span>,<span class="kw">max</span>(G.hat2)<span class="op">+</span><span class="fl">0.01</span>,<span class="fl">0.01</span>) ,<span class="dt">freq =</span>F,<span class="dt">main =</span> <span class="st">&quot;Histogram of G&quot;</span>,<span class="dt">xlab =</span> <span class="st">&quot;uniform&quot;</span>)
+
+<span class="co">#if x is Bernoulli(0.1)</span>
+G.hat3&lt;-<span class="kw">numeric</span>(m)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x&lt;-<span class="kw">rbinom</span>(n,<span class="dv">1</span>,<span class="fl">0.1</span>) <span class="co"># then x is Bernoulli(0.1)</span>
+  G.hat3[i]&lt;-<span class="kw">G</span>(x)
+}
+result3&lt;-<span class="kw">c</span>(<span class="kw">mean</span>(G.hat3),<span class="kw">quantile</span>(G.hat3,<span class="dt">probs=</span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.1</span>)))
+<span class="kw">names</span>(result3)&lt;-<span class="kw">c</span>(<span class="st">&quot;mean&quot;</span>,<span class="st">&quot;median&quot;</span>,<span class="st">&quot;deciles&quot;</span>)
+<span class="kw">print</span>(result3)
+<span class="kw">hist</span>(G.hat3,<span class="dt">breaks=</span><span class="kw">seq</span>(<span class="kw">min</span>(G.hat3)<span class="op">-</span><span class="fl">0.01</span>,<span class="kw">max</span>(G.hat3)<span class="op">+</span><span class="fl">0.01</span>,<span class="fl">0.01</span>),<span class="dt">freq =</span>F,<span class="dt">main =</span> <span class="st">&quot;Histogram of G&quot;</span>,<span class="dt">xlab =</span> <span class="st">&quot;Bernoulli(0.1)&quot;</span>)</code></pre></div>
+</div>
+<div id="section-4" class="section level3">
+<h3>2018.11.02</h3>
+</div>
+</div>
+<div id="question1-2" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li>Exercises 7.1</li>
+</ul>
+<p>Compute a jackknife estimate of the bias and the standard error of the correlation statistic in Example 7.2.</p>
+<div id="the-outcome-of-r-code-1" class="section level3">
+<h3>The outcome of R code:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bootstrap) <span class="co">#for the law data</span>
+theta.hat=<span class="kw">cor</span>(law<span class="op">$</span>LSAT, law<span class="op">$</span>GPA) <span class="co">#we get the theta.hat</span>
+n=<span class="kw">nrow</span>(law)
+j.cor=<span class="cf">function</span>(x,i)<span class="kw">cor</span>(x[i,<span class="dv">1</span>],x[i,<span class="dv">2</span>])
+theta.jack=<span class="kw">numeric</span>(n)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){
+  theta.jack[i]=<span class="kw">j.cor</span>(law,(<span class="dv">1</span><span class="op">:</span>n)[<span class="op">-</span>i])
+}
+bias.jack=(n<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span>(<span class="kw">mean</span>(theta.jack)<span class="op">-</span>theta.hat) <span class="co">#we get the bias.jack</span>
+se.jack=<span class="kw">sd</span>(theta.jack)<span class="op">*</span><span class="kw">sqrt</span>((n<span class="op">-</span><span class="dv">1</span>)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>n) <span class="co">#we get the se.jack</span>
+
+result &lt;-<span class="st"> </span><span class="kw">c</span>(theta.hat,bias.jack,se.jack)
+<span class="kw">names</span>(result)&lt;-<span class="kw">c</span>(<span class="st">&quot;theta.hat&quot;</span>,<span class="st">&quot;bias.jack&quot;</span>,<span class="st">&quot;se.jack&quot;</span>)
+<span class="kw">print</span>(result) <span class="co"># print out the result.</span></code></pre></div>
+</div>
+</div>
+<div id="question2-1" class="section level2">
+<h2>Question2</h2>
+<ul>
+<li>Exercises 7.5 Refer to Exercise 7.4. Compute 95% bootstrap confidence intervals for the mean time between failures <span class="math inline">\(1/ \lambda\)</span> by the standard normal, basic, percentile, and BCa methods. Compare the intervals and explain why they may differ.</li>
+</ul>
+<div id="the-outcome-of-r-code-2" class="section level3">
+<h3>The outcome of R code:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(boot) <span class="co"># get the air-conditioning data</span>
+b.mean=<span class="cf">function</span>(x,i)<span class="kw">mean</span>(x[i])
+mean.boot=<span class="kw">boot</span>(<span class="dt">data=</span>aircondit<span class="op">$</span>hours,<span class="dt">statistic=</span>b.mean,<span class="dt">R=</span><span class="dv">1000</span>)
+mean.boot
+CI=<span class="kw">boot.ci</span>(mean.boot,<span class="dt">type=</span><span class="kw">c</span>(<span class="st">&quot;norm&quot;</span>,<span class="st">&quot;basic&quot;</span>,<span class="st">&quot;perc&quot;</span>,<span class="st">&quot;bca&quot;</span>))
+<span class="kw">print</span>(CI)
+<span class="kw">hist</span>(aircondit<span class="op">$</span>hours,<span class="dt">breaks =</span> <span class="dv">50</span>,<span class="dt">freq =</span> F)</code></pre></div>
+<p>The CIs of mean time between failures <span class="math inline">\(1/ \lambda\)</span> from left to right are basic, standard normal, percentile and BCa methods. We can find the times between failures has a right-biased distribution. The quantiles are left compared to the normal distribution.</p>
+</div>
+</div>
+<div id="question3-1" class="section level2">
+<h2>Question3</h2>
+<ul>
+<li>Exercises 7.8</li>
+</ul>
+<p>Refer to Exercise 7.7. Obtain the jackknife estimates of bias and standard error of <span class="math inline">\(\hat{\theta}\)</span>.</p>
+<div id="the-outcome-of-r-code-3" class="section level3">
+<h3>The outcome of R code:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(bootstrap)  <span class="co">#for the scor data</span>
+n=<span class="kw">nrow</span>(scor)
+sigma.hat=<span class="kw">cov</span>(scor)<span class="op">*</span>(n<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>n
+eigenvalues.hat=<span class="kw">eigen</span>(sigma.hat)<span class="op">$</span>values
+theta.hat=eigenvalues.hat[<span class="dv">1</span>]<span class="op">/</span><span class="kw">sum</span>(eigenvalues.hat)
+theta.jack=<span class="kw">numeric</span>(n)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>n){
+  sigma.jack=<span class="kw">cov</span>(scor[<span class="op">-</span>i,])<span class="op">*</span>(n<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>n
+  eigenvalues.jack=<span class="kw">eigen</span>(sigma.jack)<span class="op">$</span>values
+  theta.jack[i]=eigenvalues.jack[<span class="dv">1</span>]<span class="op">/</span><span class="kw">sum</span>(eigenvalues.jack)
+}
+bias.jack=(n<span class="op">-</span><span class="dv">1</span>)<span class="op">*</span>(<span class="kw">mean</span>(theta.jack)<span class="op">-</span>theta.hat) <span class="co"># get the bias.jack</span>
+se.jack=<span class="kw">sd</span>(theta.jack)<span class="op">*</span><span class="kw">sqrt</span>((n<span class="op">-</span><span class="dv">1</span>)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>n)<span class="co"># get the se.jack</span>
+
+result &lt;-<span class="st"> </span><span class="kw">c</span>(bias.jack,se.jack)
+<span class="kw">names</span>(result)&lt;-<span class="kw">c</span>(<span class="st">&quot;bias.jack&quot;</span>,<span class="st">&quot;se.jack&quot;</span>)
+<span class="kw">print</span>(result) <span class="co"># print out the result.</span></code></pre></div>
+</div>
+</div>
+<div id="question4" class="section level2">
+<h2>Question4</h2>
+<ul>
+<li>Exercises 7.11 In Example 7.18, leave-one-out (n-fold) cross validation was used to select the best fitting model. Use leave-two-out cross validation to compare the models.</li>
+</ul>
+<div id="the-outcome-of-r-code-4" class="section level3">
+<h3>The outcome of R code:</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(DAAG) 
+<span class="kw">attach</span>(ironslag)
+a &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">10</span>, <span class="dv">40</span>, <span class="fl">0.1</span>) <span class="co">#sequence for plotting fits</span>
+
+L1 &lt;-<span class="st"> </span><span class="kw">lm</span>(magnetic <span class="op">~</span><span class="st"> </span>chemical)
+<span class="kw">plot</span>(chemical, magnetic, <span class="dt">main=</span><span class="st">&quot;Linear&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)
+yhat1 &lt;-<span class="st"> </span>L1<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>L1<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>a
+<span class="kw">lines</span>(a, yhat1, <span class="dt">lwd=</span><span class="dv">2</span>)
+
+L2 &lt;-<span class="st"> </span><span class="kw">lm</span>(magnetic <span class="op">~</span><span class="st"> </span>chemical <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(chemical<span class="op">^</span><span class="dv">2</span>))
+<span class="kw">plot</span>(chemical, magnetic, <span class="dt">main=</span><span class="st">&quot;Quadratic&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)
+yhat2 &lt;-<span class="st"> </span>L2<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>L2<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>a <span class="op">+</span><span class="st"> </span>L2<span class="op">$</span>coef[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>a<span class="op">^</span><span class="dv">2</span>
+<span class="kw">lines</span>(a, yhat2, <span class="dt">lwd=</span><span class="dv">2</span>)
+
+L3 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">log</span>(magnetic) <span class="op">~</span><span class="st"> </span>chemical)
+<span class="kw">plot</span>(chemical, magnetic, <span class="dt">main=</span><span class="st">&quot;Exponential&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)
+logyhat3 &lt;-<span class="st"> </span>L3<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>L3<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>a
+yhat3 &lt;-<span class="st"> </span><span class="kw">exp</span>(logyhat3)
+<span class="kw">lines</span>(a, yhat3, <span class="dt">lwd=</span><span class="dv">2</span>)
+
+L4 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">log</span>(magnetic) <span class="op">~</span><span class="st"> </span><span class="kw">log</span>(chemical))
+<span class="kw">plot</span>(<span class="kw">log</span>(chemical), <span class="kw">log</span>(magnetic), <span class="dt">main=</span><span class="st">&quot;Log-Log&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>)
+logyhat4 &lt;-<span class="st"> </span>L4<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>L4<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(a)
+<span class="kw">lines</span>(<span class="kw">log</span>(a), logyhat4, <span class="dt">lwd=</span><span class="dv">2</span>)
+
+n &lt;-<span class="st"> </span><span class="kw">length</span>(magnetic) <span class="co">#in DAAG ironslag</span>
+e1 &lt;-<span class="st"> </span>e2 &lt;-<span class="st"> </span>e3 &lt;-<span class="st"> </span>e4 &lt;-<span class="st"> </span><span class="kw">numeric</span>(n<span class="op">/</span><span class="dv">2</span>) <span class="co"># for n/2-fold(leave-two-out) cross validation</span>
+<span class="co"># fit models on leave-two-out samples</span>
+
+<span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(n<span class="op">/</span><span class="dv">2</span>)) {
+index&lt;-<span class="kw">c</span>(<span class="dv">2</span><span class="op">*</span>k<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span><span class="op">*</span>k)  <span class="co">#Subscript of leave-two-out samples point</span>
+y &lt;-<span class="st"> </span>magnetic[<span class="op">-</span>index]
+x &lt;-<span class="st"> </span>chemical[<span class="op">-</span>index]
+
+J1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x)
+yhat1 &lt;-<span class="st"> </span>J1<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>J1<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>chemical[index]
+e1[k] &lt;-<span class="st"> </span><span class="kw">mean</span>((magnetic[index] <span class="op">-</span><span class="st"> </span>yhat1)<span class="op">^</span><span class="dv">2</span>)
+
+J2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>))
+yhat2 &lt;-<span class="st"> </span>J2<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>J2<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>chemical[index] <span class="op">+</span>
+J2<span class="op">$</span>coef[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>chemical[index]<span class="op">^</span><span class="dv">2</span>
+e2[k] &lt;-<span class="st"> </span><span class="kw">mean</span>((magnetic[index] <span class="op">-</span><span class="st"> </span>yhat2)<span class="op">^</span><span class="dv">2</span>)
+
+J3 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">log</span>(y) <span class="op">~</span><span class="st"> </span>x)
+logyhat3 &lt;-<span class="st"> </span>J3<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>J3<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>chemical[index]
+yhat3 &lt;-<span class="st"> </span><span class="kw">exp</span>(logyhat3)
+e3[k] &lt;-<span class="st"> </span><span class="kw">mean</span>((magnetic[index] <span class="op">-</span><span class="st"> </span>yhat3)<span class="op">^</span><span class="dv">2</span>)
+
+J4 &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="kw">log</span>(y) <span class="op">~</span><span class="st"> </span><span class="kw">log</span>(x))
+logyhat4 &lt;-<span class="st"> </span>J4<span class="op">$</span>coef[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>J4<span class="op">$</span>coef[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span><span class="kw">log</span>(chemical[index])
+yhat4 &lt;-<span class="st"> </span><span class="kw">exp</span>(logyhat4)
+e4[k] &lt;-<span class="st"> </span><span class="kw">mean</span>((magnetic[index] <span class="op">-</span><span class="st"> </span>yhat4)<span class="op">^</span><span class="dv">2</span>)
+}
+
+result &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">mean</span>(e1), <span class="kw">mean</span>(e2), <span class="kw">mean</span>(e3), <span class="kw">mean</span>(e4))
+<span class="kw">names</span>(result) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Lin&quot;</span>, <span class="st">&quot;Quad&quot;</span>, <span class="st">&quot;Expo&quot;</span>, <span class="st">&quot;L-L&quot;</span>)
+<span class="kw">print</span>(result) <span class="co"># print out the result.</span>
+
+L2</code></pre></div>
+<p>According to the prediction error criterion, Model 2, the quadratic model, would be the best fit for the data.</p>
+</div>
+<div id="section-5" class="section level3">
+<h3>2018.11.16</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(latticeExtra)
+<span class="kw">library</span>(RANN)
+<span class="kw">library</span>(energy)
+<span class="kw">library</span>(Ball)
+<span class="kw">library</span>(boot)
+<span class="kw">library</span>(ggplot2)</code></pre></div>
+</div>
+</div>
+<div id="question1-3" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li>Exercises 8.1</li>
+</ul>
+<p>Implement the two-sample Cramer-von Mises test for equal distributions as a permutation test. Apply the test to the data in Examples 8.1 and 8.2.</p>
+<div id="answer-8.1" class="section level3">
+<h3>Answer 8.1 :</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+<span class="kw">attach</span>(chickwts)
+x &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">as.vector</span>(weight[feed <span class="op">==</span><span class="st"> &quot;soybean&quot;</span>])) 
+y &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">as.vector</span>(weight[feed <span class="op">==</span><span class="st"> &quot;linseed&quot;</span>])) 
+<span class="kw">detach</span>(chickwts)
+
+R &lt;-<span class="st"> </span><span class="dv">999</span>  <span class="co">#number of replicates</span>
+z &lt;-<span class="st"> </span><span class="kw">c</span>(x, y)
+K&lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">26</span>
+n&lt;-<span class="kw">length</span>(x)
+reps &lt;-<span class="st"> </span><span class="kw">numeric</span>(R)
+
+CramerTwoSamples &lt;-<span class="st"> </span><span class="cf">function</span>(x1,x2){
+  Fx1&lt;-<span class="kw">ecdf</span>(x1)
+  Fx2&lt;-<span class="kw">ecdf</span>(x2)
+  n&lt;-<span class="kw">length</span>(x1)
+  m&lt;-<span class="kw">length</span>(x2)
+  w1&lt;-<span class="kw">sum</span>((<span class="kw">Fx1</span>(x1)<span class="op">-</span><span class="kw">Fx2</span>(x1))<span class="op">^</span><span class="dv">2</span>)<span class="op">+</span><span class="kw">sum</span>((<span class="kw">Fx1</span>(x2)<span class="op">-</span><span class="kw">Fx2</span>(x2))<span class="op">^</span><span class="dv">2</span>) 
+  w2&lt;-w1<span class="op">*</span>m<span class="op">*</span>n<span class="op">/</span>((m<span class="op">+</span>n)<span class="op">^</span><span class="dv">2</span>)
+  <span class="kw">return</span>(w2)
+}  <span class="co">#get the Cramer-von Mises statistic</span>
+
+t0 &lt;-<span class="st">  </span><span class="kw">CramerTwoSamples</span> (x,y)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>R) {
+  k&lt;-<span class="st"> </span><span class="kw">sample</span>(K, <span class="dt">size =</span> n, <span class="dt">replace =</span> <span class="ot">FALSE</span>) 
+  x1 &lt;-<span class="st"> </span>z[k]
+  y1 &lt;-<span class="st"> </span>z[<span class="op">-</span>k]   <span class="co">#complement of x1 </span>
+  reps[i] &lt;-<span class="st"> </span><span class="kw">CramerTwoSamples</span> (x1,y1)
+  } 
+  p &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">abs</span>(<span class="kw">c</span>(t0, reps)) <span class="op">&gt;=</span><span class="st"> </span><span class="kw">abs</span>(t0)) 
+  p
+  
+  <span class="kw">hist</span>(reps, <span class="dt">main =</span> <span class="st">&quot;&quot;</span>, <span class="dt">freq =</span> <span class="ot">FALSE</span>, <span class="dt">xlab =</span> <span class="st">&quot;Cramer-von Mises statistic&quot;</span>, <span class="dt">breaks =</span> <span class="st">&quot;scott&quot;</span>)
+  <span class="kw">points</span>(t0, <span class="dv">0</span>, <span class="dt">cex =</span> <span class="dv">1</span>, <span class="dt">pch =</span> <span class="dv">16</span>)  <span class="co">#observed T</span></code></pre></div>
+</div>
+</div>
+<div id="question2-2" class="section level2">
+<h2>Question2</h2>
+<p>Design experiments for evaluating the performance of the NN, energy, and ball methods in various situations.<br /> (1)Unequal variances and equal expectations <br /> (2)Unequal variances and unequal expectations <br /> (3)Non-normal distributions: t distribution with 1 df (heavy-tailed distribution), bimodal distribution (mixture of two normal distributions) <br /> (4)Unbalanced samples (say, 1 case versus 10 controls)</p>
+<div id="answer-4" class="section level3">
+<h3>Answer :</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## variable definition
+m &lt;-<span class="st"> </span><span class="dv">500</span> <span class="co">#permutation samples</span>
+p&lt;-<span class="dv">2</span> <span class="co"># dimension of data</span>
+n1 &lt;-<span class="st"> </span>n2 &lt;-<span class="st"> </span><span class="dv">50</span> <span class="co">#the sample size of x and y</span>
+R&lt;-<span class="dv">99</span> <span class="co">#boot parameter</span>
+k&lt;-<span class="dv">3</span> <span class="co">#boot parameter</span>
+n &lt;-<span class="st"> </span>n1 <span class="op">+</span><span class="st"> </span>n2
+N =<span class="st"> </span><span class="kw">c</span>(n1,n2)
+<span class="co"># the function of NN method</span>
+Tn &lt;-<span class="st"> </span><span class="cf">function</span>(z, ix, sizes,k){
+  n1 &lt;-<span class="st"> </span>sizes[<span class="dv">1</span>]; n2 &lt;-<span class="st"> </span>sizes[<span class="dv">2</span>]; n &lt;-<span class="st"> </span>n1 <span class="op">+</span><span class="st"> </span>n2
+  <span class="cf">if</span>(<span class="kw">is.vector</span>(z)) z &lt;-<span class="st"> </span><span class="kw">data.frame</span>(z,<span class="dv">0</span>);
+  z &lt;-<span class="st"> </span>z[ix, ];
+  NN &lt;-<span class="st"> </span><span class="kw">nn2</span>(<span class="dt">data=</span>z, <span class="dt">k=</span>k<span class="op">+</span><span class="dv">1</span>) 
+  block1 &lt;-<span class="st"> </span>NN<span class="op">$</span>nn.idx[<span class="dv">1</span><span class="op">:</span>n1,<span class="op">-</span><span class="dv">1</span>]
+  block2 &lt;-<span class="st"> </span>NN<span class="op">$</span>nn.idx[(n1<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n,<span class="op">-</span><span class="dv">1</span>]
+  i1 &lt;-<span class="st"> </span><span class="kw">sum</span>(block1 <span class="op">&lt;</span><span class="st"> </span>n1 <span class="op">+</span><span class="st"> </span>.<span class="dv">5</span>)
+  i2 &lt;-<span class="st"> </span><span class="kw">sum</span>(block2 <span class="op">&gt;</span><span class="st"> </span>n1<span class="op">+</span>.<span class="dv">5</span>)
+  (i1 <span class="op">+</span><span class="st"> </span>i2) <span class="op">/</span><span class="st"> </span>(k <span class="op">*</span><span class="st"> </span>n)
+}
+
+eqdist.nn &lt;-<span class="st"> </span><span class="cf">function</span>(z,sizes,k){
+  boot.obj &lt;-<span class="st"> </span><span class="kw">boot</span>(<span class="dt">data=</span>z,<span class="dt">statistic=</span>Tn,<span class="dt">R=</span>R,<span class="dt">sim =</span> <span class="st">&quot;permutation&quot;</span>, <span class="dt">sizes =</span> sizes,<span class="dt">k=</span>k)
+  ts &lt;-<span class="st"> </span><span class="kw">c</span>(boot.obj<span class="op">$</span>t0,boot.obj<span class="op">$</span>t)
+  p.value &lt;-<span class="st"> </span><span class="kw">mean</span>(ts<span class="op">&gt;=</span>ts[<span class="dv">1</span>])
+  <span class="kw">list</span>(<span class="dt">statistic=</span>ts[<span class="dv">1</span>],<span class="dt">p.value=</span>p.value)
+}
+p.values &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="ot">NA</span>,m,<span class="dv">3</span>) <span class="co">#p</span>
+
+
+##(1)Unequal variances and equal expectations
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+sd &lt;-<span class="st"> </span><span class="fl">1.5</span>
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n1<span class="op">*</span>p),<span class="dt">ncol=</span>p)
+  y &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n2<span class="op">*</span>p,<span class="dt">sd=</span>sd),<span class="dt">ncol=</span>p)
+  z &lt;-<span class="st"> </span><span class="kw">rbind</span>(x,y)
+  p.values[i,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.nn</span>(z,N,k)<span class="op">$</span>p.value<span class="co">#NN method</span>
+  p.values[i,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.etest</span>(z,<span class="dt">sizes=</span>N,<span class="dt">R=</span>R)<span class="op">$</span>p.value<span class="co">#energy methods</span>
+  p.values[i,<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">bd.test</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">R=</span><span class="dv">999</span>,<span class="dt">seed=</span>i<span class="op">*</span><span class="dv">12345</span>)<span class="op">$</span>p.value<span class="co"># ball method</span>
+}
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>;
+pow1 &lt;-<span class="st"> </span><span class="kw">colMeans</span>(p.values<span class="op">&lt;</span>alpha)
+
+
+##(2)Unequal variances and unequal expectations
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+mu &lt;-<span class="st"> </span><span class="fl">0.5</span>
+sd &lt;-<span class="st"> </span><span class="fl">1.5</span>
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n1<span class="op">*</span>p),<span class="dt">ncol=</span>p)
+  y &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n2<span class="op">*</span>p,<span class="dt">mean=</span>mu,<span class="dt">sd=</span>sd),<span class="dt">ncol=</span>p)
+  z &lt;-<span class="st"> </span><span class="kw">rbind</span>(x,y)
+  p.values[i,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.nn</span>(z,N,k)<span class="op">$</span>p.value<span class="co">#NN method</span>
+  p.values[i,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.etest</span>(z,<span class="dt">sizes=</span>N,<span class="dt">R=</span>R)<span class="op">$</span>p.value<span class="co">#energy methods</span>
+  p.values[i,<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">bd.test</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">R=</span><span class="dv">999</span>,<span class="dt">seed=</span>i<span class="op">*</span><span class="dv">12345</span>)<span class="op">$</span>p.value<span class="co"># ball method</span>
+}
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>;
+pow2 &lt;-<span class="st"> </span><span class="kw">colMeans</span>(p.values<span class="op">&lt;</span>alpha)
+
+
+##(3)Non-normal distributions: t distribution with 1 df (heavy-tailed distribution), bimodal distribution (mixture of two normal distributions)
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+mu &lt;-<span class="st"> </span><span class="fl">0.5</span>
+sd &lt;-<span class="st"> </span><span class="dv">2</span>
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rt</span>(n1<span class="op">*</span>p,<span class="dt">df=</span><span class="dv">1</span>),<span class="dt">ncol=</span>p)
+  y1 =<span class="st"> </span><span class="kw">rnorm</span>(n2<span class="op">*</span>p);  y2 =<span class="st"> </span><span class="kw">rnorm</span>(n2<span class="op">*</span>p,<span class="dt">mean=</span>mu,<span class="dt">sd=</span>sd)
+  w =<span class="st"> </span><span class="kw">rbinom</span>(n, <span class="dv">1</span>, .<span class="dv">5</span>) <span class="co"># 50:50 random choice</span>
+  y &lt;-<span class="st"> </span><span class="kw">matrix</span>(w<span class="op">*</span>y1 <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">-</span>w)<span class="op">*</span>y2,<span class="dt">ncol=</span>p)<span class="co"># normal mixture</span>
+  z &lt;-<span class="st"> </span><span class="kw">rbind</span>(x,y)
+  p.values[i,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.nn</span>(z,N,k)<span class="op">$</span>p.value<span class="co">#NN method</span>
+  p.values[i,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.etest</span>(z,<span class="dt">sizes=</span>N,<span class="dt">R=</span>R)<span class="op">$</span>p.value<span class="co">#energy methods</span>
+  p.values[i,<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">bd.test</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">R=</span><span class="dv">999</span>,<span class="dt">seed=</span>i<span class="op">*</span><span class="dv">12345</span>)<span class="op">$</span>p.value<span class="co"># ball method</span>
+}
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>;
+pow3 &lt;-<span class="st"> </span><span class="kw">colMeans</span>(p.values<span class="op">&lt;</span>alpha)
+
+
+##(4)Unbalanced samples 
+<span class="kw">set.seed</span>(<span class="dv">1</span>)
+mu &lt;-<span class="st"> </span><span class="fl">0.5</span>
+N =<span class="st"> </span><span class="kw">c</span>(n1,n2<span class="op">*</span><span class="dv">2</span>)
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>m){
+  x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(n1<span class="op">*</span>p),<span class="dt">ncol=</span>p);
+  y &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">rnorm</span>(n2<span class="op">*</span><span class="dv">2</span>),<span class="kw">rnorm</span>(n2<span class="op">*</span><span class="dv">2</span>,<span class="dt">mean=</span>mu));
+  z &lt;-<span class="st"> </span><span class="kw">rbind</span>(x,y)
+  p.values[i,<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.nn</span>(z,N,k)<span class="op">$</span>p.value<span class="co">#NN method</span>
+  p.values[i,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">eqdist.etest</span>(z,<span class="dt">sizes=</span>N,<span class="dt">R=</span>R)<span class="op">$</span>p.value<span class="co">#energy methods</span>
+  p.values[i,<span class="dv">3</span>] &lt;-<span class="st"> </span><span class="kw">bd.test</span>(<span class="dt">x=</span>x,<span class="dt">y=</span>y,<span class="dt">R=</span><span class="dv">999</span>,<span class="dt">seed=</span>i<span class="op">*</span><span class="dv">12345</span>)<span class="op">$</span>p.value<span class="co"># ball method</span>
+}
+alpha &lt;-<span class="st"> </span><span class="fl">0.05</span>;
+pow4 &lt;-<span class="st"> </span><span class="kw">colMeans</span>(p.values<span class="op">&lt;</span>alpha)
+
+result &lt;-<span class="st"> </span><span class="kw">data.frame</span>(pow1, pow2, pow3, pow4, <span class="dt">row.names =</span> <span class="kw">c</span>(<span class="st">'NN'</span>,<span class="st">'energy'</span>,<span class="st">'Ball'</span>))
+result</code></pre></div>
+</div>
+</div>
+<div id="question3-2" class="section level2">
+<h2>Question3</h2>
+<ul>
+<li>Exercises 9.3</li>
+</ul>
+<p>Use the Metropolis-Hastings sampler to generate random variables from a standard Cauchy distribution. Discard the first 1000 of the chain, and compare the deciles of the generated observations with the deciles of the standard Cauchydistribution(see qcauchy or qt with df=1). Recall that a <span class="math inline">\(Cauchy(\theta,\eta)\)</span> distribution has density function <span class="math display">\[f(x)=\frac{1}{\theta\pi(1+[(x-\eta)/\theta]^2)},  -\infty&lt;x&lt;\infty, \theta&gt;0.\]</span> The standard Cauchy has the <span class="math inline">\(Cauchy(\theta=1,\eta=0)\)</span> density. (Note that the standard Cauchy density is equal to the Student t density with one degree of freedom.)</p>
+<div id="answer-9.3" class="section level3">
+<h3>Answer 9.3 :</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="cf">function</span>(x,u,lamada) {
+ <span class="kw">return</span>(lamada<span class="op">/</span>(pi<span class="op">*</span>(lamada<span class="op">^</span><span class="dv">2</span><span class="op">+</span>(x<span class="op">-</span>u)<span class="op">^</span><span class="dv">2</span>)))
+}
+
+m &lt;-<span class="st"> </span><span class="dv">500000</span>
+u&lt;-<span class="st"> </span><span class="dv">0</span>
+lamada &lt;-<span class="st"> </span><span class="dv">1</span>
+x &lt;-<span class="st"> </span><span class="kw">numeric</span>(m)
+
+<span class="co">#xt &lt;- x[i-1]</span>
+<span class="co">#y &lt;- rchisq(1, df = xt)</span>
+
+
+x[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>) 
+k &lt;-<span class="st"> </span><span class="dv">0</span>
+u &lt;-<span class="st"> </span><span class="kw">runif</span>(m)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>m) { 
+  xt &lt;-<span class="st"> </span>x[i<span class="op">-</span><span class="dv">1</span>]
+  y &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, <span class="dt">mean =</span> xt )
+  num &lt;-<span class="st"> </span><span class="kw">f</span>(y, <span class="dv">0</span>, <span class="dv">1</span> ) <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(xt, <span class="dt">mean =</span> y) 
+  den &lt;-<span class="st"> </span><span class="kw">f</span>(xt, <span class="dv">0</span>, <span class="dv">1</span> ) <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(y, <span class="dt">mean =</span> xt) 
+  <span class="cf">if</span> (u[i] <span class="op">&lt;=</span><span class="st"> </span>num<span class="op">/</span>den) x[i] &lt;-<span class="st"> </span>y 
+  <span class="cf">else</span> {
+         x[i] &lt;-<span class="st"> </span>xt
+         k &lt;-<span class="st"> </span>k<span class="op">+</span><span class="dv">1</span>
+         }
+}
+b &lt;-<span class="st"> </span><span class="dv">2001</span> <span class="co">#discard the burnin sample</span>
+y &lt;-<span class="st"> </span>x[b<span class="op">:</span>m]
+a &lt;-<span class="st"> </span><span class="kw">ppoints</span>(<span class="dv">100</span>)
+Qcauchy &lt;-<span class="st"> </span><span class="kw">qcauchy</span>(a)
+Q &lt;-<span class="st"> </span><span class="kw">quantile</span>(x, a)
+<span class="kw">qqplot</span>(Qcauchy, Q, <span class="dt">main=</span><span class="st">&quot;&quot;</span>,
+<span class="dt">xlab=</span><span class="st">&quot;Rayleigh Quantiles&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Sample Quantiles&quot;</span>, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>) ,<span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">5</span>))
+<span class="kw">hist</span>(y, <span class="dt">breaks=</span><span class="dv">50</span>, <span class="dt">main=</span><span class="st">&quot;&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">freq=</span><span class="ot">FALSE</span>) 
+<span class="kw">lines</span>(Qcauchy, <span class="kw">f</span>(Qcauchy, <span class="dv">0</span>, <span class="dv">1</span>))</code></pre></div>
+</div>
+</div>
+<div id="question4-1" class="section level2">
+<h2>Question4</h2>
+<ul>
+<li>Exercises 9.6</li>
+</ul>
+<p>Rao [220, Sec. 5g] presented an example on genetic linkage of 197 animals in four categories (also discussed in [67, 106, 171, 266]). The group sizes are (125,18,20,34). Assume that the probabilities of the corresponding multinomial distribution are <span class="math display">\[(\frac{1}{2}+\frac{\theta}{4}, \frac{1-\theta}{4}, \frac{1-\theta}{4},\frac{\theta}{4}).\]</span>Estimate the posterior distribution of <span class="math inline">\(\theta\)</span> given the observed sample, using one of the methods in this chapter.</p>
+<div id="answer-9.4" class="section level3">
+<h3>Answer 9.4 :</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  w &lt;-<span class="st"> </span><span class="fl">0.25</span>   <span class="co">#width of the uniform support set </span>
+  m &lt;-<span class="st"> </span><span class="dv">5000</span>   <span class="co">#length of the chain </span>
+  burn.in &lt;-<span class="st"> </span><span class="dv">1000</span>   <span class="co">#burn-in time </span>
+  y &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">125</span>,<span class="dv">18</span>,<span class="dv">20</span>,<span class="dv">34</span>)
+  x &lt;-<span class="st"> </span><span class="kw">numeric</span>(m)   <span class="co">#the chain</span>
+  
+  prob &lt;-<span class="st"> </span><span class="cf">function</span>(b, y) { 
+     <span class="co"># computes (without the constant) the target density </span>
+    <span class="cf">if</span> (b <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">||</span><span class="st"> </span>b <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>) <span class="kw">return</span> (<span class="dv">0</span>)
+    <span class="kw">return</span>((<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">+</span>b<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>y[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span>((<span class="dv">1</span><span class="op">-</span>b)<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>y[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>((<span class="dv">1</span><span class="op">-</span>b)<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>y[<span class="dv">3</span>] <span class="op">*</span><span class="st"> </span>(b<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>y[<span class="dv">4</span>])
+  }
+  
+  u &lt;-<span class="st"> </span><span class="kw">runif</span>(m)    <span class="co">#for accept/reject step</span>
+  v &lt;-<span class="st"> </span><span class="kw">runif</span>(m, <span class="op">-</span>w, w)    <span class="co">#proposal distribution </span>
+  x[<span class="dv">1</span>] &lt;-<span class="fl">0.25</span> 
+  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>m) { 
+    z &lt;-<span class="st"> </span>x[i<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>v[i] 
+    <span class="cf">if</span> (u[i] <span class="op">&lt;=</span><span class="st"> </span><span class="kw">prob</span>(z,y) <span class="op">/</span><span class="st"> </span><span class="kw">prob</span>(x[i<span class="op">-</span><span class="dv">1</span>],y)) 
+      x[i] &lt;-z 
+    <span class="cf">else</span> 
+      x[i] &lt;-<span class="st"> </span>x[i<span class="op">-</span><span class="dv">1</span>] 
+  }
+  
+   xb &lt;-<span class="st"> </span>x[(burn.in<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>m]
+   xc&lt;-<span class="kw">mean</span>(xb)
+   
+   <span class="kw">print</span>(xc)    <span class="co">#estimation value of theta</span>
+   <span class="kw">print</span>(y<span class="op">/</span><span class="kw">sum</span>(y))
+   <span class="kw">print</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">+</span>xc<span class="op">/</span><span class="dv">4</span>,(<span class="dv">1</span><span class="op">-</span>xc)<span class="op">/</span><span class="dv">4</span>,(<span class="dv">1</span><span class="op">-</span>xc)<span class="op">/</span><span class="dv">4</span>,xc<span class="op">/</span><span class="dv">4</span>))</code></pre></div>
+</div>
+<div id="section-6" class="section level3">
+<h3>2018.11.23</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(latticeExtra)
+<span class="kw">library</span>(RANN)
+<span class="kw">library</span>(Ball)
+<span class="kw">library</span>(boot)</code></pre></div>
+</div>
+</div>
+<div id="question1-4" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li>Exercises 9.6</li>
+</ul>
+<p>Rao [220, Sec. 5g] presented an example on genetic linkage of 197 animals in four categories (also discussed in [67, 106, 171, 266]). The group sizes are (125, 18, 20, 34). Assume that the probabilities of the corresponding multinomial distribution are <span class="math display">\[  (\frac{1}{2}+\frac{\theta}{4},\frac{1-\theta}{4},\frac{1-\theta}{4},\frac{\theta}{4}) \]</span> Estimate the posterior distribution of <span class="math inline">\(\theta\)</span> given the observed sample, using one of the methods in this chapter. For exercise 9.6, use the Gelman-Rubin method to monitor convergence of the chain, and run the chain until it converges approximately to the target distribution according to <span class="math inline">\(\hat{R}&lt;1.2\)</span>.</p>
+<div id="answer-9.6" class="section level3">
+<h3>Answer 9.6 :</h3>
+<p>The posterior distribution of <span class="math inline">\(\theta\)</span> given <span class="math inline">\((x1,\cdots, x4)=(125, 18, 20, 34)\)</span> is <span class="math display">\[  p(\theta|(x1,\cdots, x4))= \frac{197!}{x1!x2!x3!x4!}p_1^{x1}p_2^{x2}p_3^{x3}p_4^{x4}. \]</span> Notice that <span class="math inline">\(0&lt;\theta&lt;1\)</span>. The proposal distribution is uniform distribution.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">123</span>)
+Gelman.Rubin &lt;-<span class="st"> </span><span class="cf">function</span>(psi) {
+        <span class="co"># psi[i,j] is the statistic psi(X[i,1:j])</span>
+        <span class="co"># for chain in i-th row of X</span>
+        psi &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(psi)
+        n &lt;-<span class="st"> </span><span class="kw">ncol</span>(psi)
+        k &lt;-<span class="st"> </span><span class="kw">nrow</span>(psi)
+
+        psi.means &lt;-<span class="st"> </span><span class="kw">rowMeans</span>(psi)     <span class="co">#row means</span>
+        B &lt;-<span class="st"> </span>n <span class="op">*</span><span class="st"> </span><span class="kw">var</span>(psi.means)        <span class="co">#between variance est.</span>
+        psi.w &lt;-<span class="st"> </span><span class="kw">apply</span>(psi, <span class="dv">1</span>, <span class="st">&quot;var&quot;</span>)  <span class="co">#within variances</span>
+        W &lt;-<span class="st"> </span><span class="kw">mean</span>(psi.w)               <span class="co">#within est.</span>
+        v.hat &lt;-<span class="st"> </span>W<span class="op">*</span>(n<span class="op">-</span><span class="dv">1</span>)<span class="op">/</span>n <span class="op">+</span><span class="st"> </span>(B<span class="op">/</span>n)     <span class="co">#upper variance est.</span>
+        r.hat &lt;-<span class="st"> </span>v.hat <span class="op">/</span><span class="st"> </span>W             <span class="co">#G-R statistic</span>
+        <span class="kw">return</span>(r.hat)
+}
+
+size&lt;-<span class="kw">c</span>(<span class="dv">125</span>,<span class="dv">18</span>,<span class="dv">20</span>,<span class="dv">34</span>)
+prob &lt;-<span class="st"> </span><span class="cf">function</span>(y, size) {
+        <span class="co"># computes (without the constant) the target density</span>
+        <span class="cf">if</span> (y <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">||</span><span class="st"> </span>y <span class="op">&gt;=</span><span class="st"> </span><span class="dv">1</span>)
+            <span class="kw">return</span> (<span class="dv">0</span>)
+        <span class="kw">return</span>((<span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">+</span>y<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>size[<span class="dv">1</span>] <span class="op">*</span>((<span class="dv">1</span><span class="op">-</span>y)<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>size[<span class="dv">2</span>] <span class="op">*</span><span class="st"> </span>((<span class="dv">1</span><span class="op">-</span>y)<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>size[<span class="dv">3</span>] <span class="op">*</span>(y<span class="op">/</span><span class="dv">4</span>)<span class="op">^</span>size[<span class="dv">4</span>])
+}
+
+thetachain&lt;-<span class="cf">function</span>(m,x0){ <span class="co">#generate a Metropolis chain for theta</span>
+u &lt;-<span class="st"> </span><span class="kw">runif</span>(m)  <span class="co">#for accept/reject step</span>
+x&lt;-<span class="kw">rep</span>(<span class="dv">0</span>,m)
+x[<span class="dv">1</span>] &lt;-<span class="st"> </span>x0
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span>m) {
+    y &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1</span>) 
+    <span class="cf">if</span> (u[i] <span class="op">&lt;=</span><span class="st"> </span><span class="kw">prob</span>(y, size) <span class="op">/</span><span class="st"> </span><span class="kw">prob</span>(x[i<span class="op">-</span><span class="dv">1</span>], size))
+        x[i] &lt;-<span class="st"> </span>y  <span class="cf">else</span>
+   x[i] &lt;-<span class="st"> </span>x[i<span class="op">-</span><span class="dv">1</span>]
+}
+<span class="kw">return</span>(x)
+}
+<span class="co">#generate the chains</span>
+k=<span class="dv">4</span>      <span class="co">#number of chains to generate</span>
+n=<span class="dv">15000</span>  <span class="co">#length of chains</span>
+b=<span class="dv">1000</span>   <span class="co">#burn-in length</span>
+x0=<span class="kw">c</span>(<span class="fl">0.3</span>,<span class="fl">0.4</span>,<span class="fl">0.5</span>,<span class="fl">0.6</span>)
+theta &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow=</span>k, <span class="dt">ncol=</span>n)
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k) 
+  theta[i, ] &lt;-<span class="st"> </span><span class="kw">thetachain</span>(<span class="dt">m=</span>n,<span class="dt">x0=</span>x0[i])
+<span class="co">#compute diagnostic statistics</span>
+psi &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(theta, <span class="dv">1</span>, cumsum))
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(psi)) 
+  psi[i,] &lt;-<span class="st"> </span>psi[i,] <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(psi))
+<span class="kw">print</span>(<span class="kw">Gelman.Rubin</span>(psi))
+<span class="co">#plot psi for the four chains</span>
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>k)
+<span class="kw">plot</span>(psi[i, (b<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n], <span class="dt">type=</span><span class="st">&quot;l&quot;</span>,<span class="dt">xlab=</span>i, <span class="dt">ylab=</span><span class="kw">bquote</span>(psi))
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>)) <span class="co">#restore default</span>
+
+<span class="co">#the sequence of R-hat statistics</span>
+rhat &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, n)
+<span class="cf">for</span> (j <span class="cf">in</span> (b<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n)
+rhat[j] &lt;-<span class="st"> </span><span class="kw">Gelman.Rubin</span>(psi[,<span class="dv">1</span><span class="op">:</span>j])
+<span class="kw">plot</span>(rhat[(b<span class="op">+</span><span class="dv">1</span>)<span class="op">:</span>n], <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;R&quot;</span>)
+<span class="kw">abline</span>(<span class="dt">h=</span><span class="fl">1.2</span>, <span class="dt">lty=</span><span class="dv">2</span>)</code></pre></div>
+</div>
+<div id="section-7" class="section level3">
+<h3>2018.11.30</h3>
+</div>
+</div>
+<div id="question1-5" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li>Exercises 11.6</li>
+</ul>
+<p>Write a function to compute the cdf of the Cauchy distribution, which has density <span class="math display">\[\frac{1}{\theta\pi(1+[(x-\eta)/\theta]^2)},-\infty&lt;x&lt;\infty\]</span> where <span class="math inline">\(\theta&gt;0\)</span>. Compare your results to the results from the R function pcauchy. (Also see the source code in pcauchy.c.)</p>
+<div id="answer-11.6" class="section level3">
+<h3>Answer 11.6 :</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">f &lt;-<span class="st"> </span><span class="cf">function</span>(x, theta, eta) {
+  <span class="co">#sita mean scale parameter</span>
+  <span class="co">#eta mean the location parameter</span>
+<span class="dv">1</span><span class="op">/</span>(theta<span class="op">*</span>pi<span class="op">*</span>(<span class="dv">1</span><span class="op">+</span>((x<span class="op">-</span>eta)<span class="op">/</span>theta)<span class="op">^</span><span class="dv">2</span>))
+}
+
+up&lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">4</span>) <span class="co">#intergrand upper bound</span>
+v &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(up))
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(up)) {
+<span class="co">#standard Cauchy distribution with theta=1,eta=0</span>
+v[i]&lt;-<span class="kw">integrate</span>(f,<span class="dt">lower=</span><span class="op">-</span><span class="ot">Inf</span>,<span class="dt">upper=</span>up[i],<span class="dt">rel.tol=</span>.Machine<span class="op">$</span>double.eps<span class="op">^</span><span class="fl">0.25</span>,<span class="dt">theta=</span><span class="dv">1</span>,<span class="dt">eta=</span><span class="dv">0</span>)<span class="op">$</span>value
+}
+
+<span class="kw">data.frame</span>(<span class="dt">x=</span>up,<span class="dt">estamator=</span>v,<span class="dt">rcauchy.est=</span><span class="kw">pcauchy</span>(up),<span class="dt">error=</span>v<span class="op">-</span><span class="kw">pcauchy</span>(up))</code></pre></div>
+</div>
+</div>
+<div id="question2-3" class="section level2">
+<h2>Question2</h2>
+<ul>
+<li>Exercises 3</li>
+</ul>
+<p>A-B-O blood type problem</p>
+<p>Let the three alleles be A, B, and O.</p>
+<pre><code>  Genotype   AA    BB    OO    AO    BO    AB    AA
+  
+  Frequency  p2    q2    r2    2pr   2qr   2pq   1
+
+  Count      nAA   nBB   nOO   nAO   nBO   nAB   n</code></pre>
+<p>Observed data: <span class="math inline">\(n_{A\cdot}=n_{AA}+n_{AO}=28\)</span> (A-type), <span class="math inline">\(n_{B\cdot}=n_{BB}+n_{BO}=24\)</span> (B-type), <span class="math inline">\(n_{OO}=41\)</span> (O-type), <span class="math inline">\(n_{AB}=70\)</span> (AB-type).</p>
+<p>Use EM algorithm to solve MLE of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> (consider missing data <span class="math inline">\(n_{AA}\)</span> and <span class="math inline">\(n_{BB}\)</span>).</p>
+<p>Record the maximum likelihood values in M-steps, are they increasing?</p>
+</div>
+<div id="answer2-1" class="section level2">
+<h2>Answer2</h2>
+<p>We can see that the complete data likelihood is <span class="math display">\[l(p,q|n_{AA},n_{BB},n_{OO},n_{A.},n_{B.},n_{AB})=2n_{AA}log(p)+2n_{BB}log(q)+2n_{OO}log(r)+(n_{A.}-n_{AA})log(2pr)+(n_{B.}-n_{BB})log(2qr)+n_{AB}log(2pq) \]</span> where <span class="math inline">\(r=1-p-q\)</span>. and we can min <span class="math inline">\(-E[l(p,q|n_{AA},n_{BB},n_{OO},n_{A.},n_{B.},n_{AB})]\)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Mle function</span>
+eval_f0 &lt;-<span class="st"> </span><span class="cf">function</span>(x,x1,<span class="dt">n.A=</span><span class="dv">28</span>,<span class="dt">n.B=</span><span class="dv">24</span>,<span class="dt">nOO=</span><span class="dv">41</span>,<span class="dt">nAB=</span><span class="dv">70</span>) {
+  <span class="co">#x[1] mean p , x1[1] mean p0</span>
+  <span class="co">#x[2] mean q , x1[2] mean q0</span>
+  r1&lt;-<span class="dv">1</span><span class="op">-</span><span class="kw">sum</span>(x1)
+  nAA&lt;-n.A<span class="op">*</span>x1[<span class="dv">1</span>]<span class="op">^</span><span class="dv">2</span><span class="op">/</span>(x1[<span class="dv">1</span>]<span class="op">^</span><span class="dv">2</span><span class="op">+</span><span class="dv">2</span><span class="op">*</span>x1[<span class="dv">1</span>]<span class="op">*</span>r1)
+  nBB&lt;-n.B<span class="op">*</span>x1[<span class="dv">2</span>]<span class="op">^</span><span class="dv">2</span><span class="op">/</span>(x1[<span class="dv">2</span>]<span class="op">^</span><span class="dv">2</span><span class="op">+</span><span class="dv">2</span><span class="op">*</span>x1[<span class="dv">2</span>]<span class="op">*</span>r1)
+  r&lt;-<span class="dv">1</span><span class="op">-</span><span class="kw">sum</span>(x)
+  <span class="kw">return</span>(<span class="op">-</span><span class="dv">2</span><span class="op">*</span>nAA<span class="op">*</span><span class="kw">log</span>(x[<span class="dv">1</span>])<span class="op">-</span><span class="dv">2</span><span class="op">*</span>nBB<span class="op">*</span><span class="kw">log</span>(x[<span class="dv">2</span>])<span class="op">-</span><span class="dv">2</span><span class="op">*</span>nOO<span class="op">*</span><span class="kw">log</span>(r)<span class="op">-</span>
+<span class="st">           </span>(n.A<span class="op">-</span>nAA)<span class="op">*</span><span class="kw">log</span>(<span class="dv">2</span><span class="op">*</span>x[<span class="dv">1</span>]<span class="op">*</span>r)<span class="op">-</span>(n.B<span class="op">-</span>nBB)<span class="op">*</span><span class="kw">log</span>(<span class="dv">2</span><span class="op">*</span>x[<span class="dv">2</span>]<span class="op">*</span>r)<span class="op">-</span>nAB<span class="op">*</span><span class="kw">log</span>(<span class="dv">2</span><span class="op">*</span>x[<span class="dv">1</span>]<span class="op">*</span>x[<span class="dv">2</span>]))
+}
+
+
+<span class="co"># constraint function </span>
+eval_g0 &lt;-<span class="st"> </span><span class="cf">function</span>(x,x1,<span class="dt">n.A=</span><span class="dv">28</span>,<span class="dt">n.B=</span><span class="dv">24</span>,<span class="dt">nOO=</span><span class="dv">41</span>,<span class="dt">nAB=</span><span class="dv">70</span>) {
+  <span class="kw">return</span>(<span class="kw">sum</span>(x)<span class="op">-</span><span class="fl">0.999999</span>)
+}
+
+opts &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;algorithm&quot;</span>=<span class="st">&quot;NLOPT_LN_COBYLA&quot;</span>,
+             <span class="st">&quot;xtol_rel&quot;</span>=<span class="fl">1.0e-8</span>)
+mle&lt;-<span class="ot">NULL</span>
+r&lt;-<span class="kw">matrix</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>)
+r&lt;-<span class="kw">rbind</span>(r,<span class="kw">c</span>(<span class="fl">0.2</span>,<span class="fl">0.35</span>))<span class="co"># the beginning value of p0 and q0</span>
+j&lt;-<span class="dv">2</span>
+<span class="cf">while</span> (<span class="kw">sum</span>(<span class="kw">abs</span>(r[j,]<span class="op">-</span>r[j<span class="op">-</span><span class="dv">1</span>,]))<span class="op">&gt;</span><span class="fl">1e-8</span>) {
+res &lt;-<span class="st"> </span><span class="kw">nloptr</span>( <span class="dt">x0=</span><span class="kw">c</span>(<span class="fl">0.3</span>,<span class="fl">0.25</span>),
+               <span class="dt">eval_f=</span>eval_f0,
+               <span class="dt">lb =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">ub =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>), 
+               <span class="dt">eval_g_ineq =</span> eval_g0, 
+               <span class="dt">opts =</span> opts, <span class="dt">x1=</span>r[j,],<span class="dt">n.A=</span><span class="dv">28</span>,<span class="dt">n.B=</span><span class="dv">24</span>,<span class="dt">nOO=</span><span class="dv">41</span>,<span class="dt">nAB=</span><span class="dv">70</span> )
+j&lt;-j<span class="op">+</span><span class="dv">1</span>
+r&lt;-<span class="kw">rbind</span>(r,res<span class="op">$</span>solution)
+mle&lt;-<span class="kw">c</span>(mle,<span class="kw">eval_f0</span>(<span class="dt">x=</span>r[j,],<span class="dt">x1=</span>r[j<span class="op">-</span><span class="dv">1</span>,]))
+}
+r  <span class="co">#the result of EM algorithm</span>
+mle <span class="co">#the max likelihood values</span></code></pre></div>
+<div id="section-8" class="section level3">
+<h3>2018.12.07</h3>
+</div>
+</div>
+<div id="question1-6" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li><p>Exercises 3</p>
+<p>Use both for loops and lapply() to fit linear models to the mtcars using the formulas stored in this list:</p>
+<p>formulas &lt;- list( mpg ~ disp, mpg ~ I(1 / disp), mpg ~ disp + wt, mpg ~ I(1 / disp) + wt )</p></li>
+</ul>
+<div id="answer1-1" class="section level3">
+<h3>Answer1 :</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+<span class="kw">attach</span>(mtcars)
+formulas &lt;-<span class="st"> </span><span class="kw">list</span>( mpg <span class="op">~</span><span class="st"> </span>disp, mpg <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>disp), mpg <span class="op">~</span><span class="st"> </span>disp <span class="op">+</span><span class="st"> </span>wt, mpg <span class="op">~</span><span class="st"> </span><span class="kw">I</span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span>disp) <span class="op">+</span><span class="st"> </span>wt )
+<span class="co">#for loops</span>
+out &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="kw">length</span>(formulas))
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(formulas)) { out[[i]] &lt;-<span class="kw">lm</span>(formulas[[i]]) }
+out
+
+<span class="co">#lapply</span>
+<span class="kw">lapply</span>(formulas,lm)</code></pre></div>
+</div>
+</div>
+<div id="question2-4" class="section level2">
+<h2>Question2</h2>
+<ul>
+<li>Exercises 4</li>
+</ul>
+<p>Fit the model mpg ~ disp to each of the bootstrap replicates of mtcars in the list below by using a for loop and lapply(). Can you do it without an anonymous function?</p>
+<p>bootstraps &lt;- lapply(1:10, function(i) { rows &lt;- sample(1:nrow(mtcars), rep = TRUE) mtcars[rows, ] })</p>
+</div>
+<div id="answer2-2" class="section level2">
+<h2>Answer2</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bootstraps &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="cf">function</span>(i) {
+  rows &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(mtcars), <span class="dt">rep =</span> <span class="ot">TRUE</span>)
+  mtcars[rows, ] })
+
+<span class="co">#for loops</span>
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="kw">seq_along</span>(bootstraps)){
+  <span class="kw">print</span>(<span class="kw">lm</span>(mpg<span class="op">~</span>disp,<span class="dt">data =</span>bootstraps[[i]]))
+}
+
+<span class="co">#lapply</span>
+<span class="kw">lapply</span>(bootstraps,lm,<span class="dt">formula=</span>mpg<span class="op">~</span>disp)</code></pre></div>
+</div>
+<div id="question3-3" class="section level2">
+<h2>Question3</h2>
+<ul>
+<li>Exercises 5</li>
+</ul>
+<p>For each model in the previous two exercises,extract <span class="math inline">\(R^2\)</span> using the function below. rsq &lt;- function(mod) summary(mod)$r.squared</p>
+</div>
+<div id="answer3-1" class="section level2">
+<h2>Answer3</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#in exercise 3</span>
+rsq &lt;-<span class="st"> </span><span class="cf">function</span>(mod) <span class="kw">summary.lm</span>(mod)<span class="op">$</span>r.squared
+<span class="co">#for loops</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="kw">seq_along</span>(formulas)) {
+ <span class="kw">print</span>( <span class="kw">rsq</span>(<span class="kw">lm</span>(formulas[[i]])))
+  }
+<span class="co">#lapply</span>
+<span class="kw">lapply</span>(<span class="kw">lapply</span>(formulas,lm),rsq)
+<span class="co">#in exercise 4</span>
+<span class="co">#for loops</span>
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="kw">seq_along</span>(bootstraps)){
+  <span class="kw">print</span>(<span class="kw">rsq</span>(<span class="kw">lm</span>(mpg<span class="op">~</span>disp,<span class="dt">data =</span>bootstraps[[i]])))
+}
+
+<span class="co">#lapply</span>
+<span class="kw">lapply</span>(<span class="kw">lapply</span>(bootstraps,lm,<span class="dt">formula=</span>mpg<span class="op">~</span>disp),rsq)</code></pre></div>
+</div>
+<div id="question4-2" class="section level2">
+<h2>Question4</h2>
+<ul>
+<li>Exercises 3 in page 213</li>
+</ul>
+<p>The following code simulates the performance of a t-test for non-normal data. Use sapply() and an anonymous function to extract the p-value from every trial.</p>
+<p>trials &lt;- replicate( 100, t.test(rpois(10, 10), rpois(7, 10)), simplify = FALSE ) Extra challenge: get rid of the anonymous function by using [[ directly.</p>
+</div>
+<div id="answer4" class="section level2">
+<h2>Answer4</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#using anonymous function</span>
+trials &lt;-<span class="st"> </span><span class="kw">replicate</span>( <span class="dv">100</span>, <span class="kw">t.test</span>(<span class="kw">rpois</span>(<span class="dv">10</span>, <span class="dv">10</span>), <span class="kw">rpois</span>(<span class="dv">7</span>, <span class="dv">10</span>)), <span class="dt">simplify =</span> <span class="ot">FALSE</span> )
+p_value&lt;-<span class="cf">function</span>(mod) mod<span class="op">$</span>p.value
+<span class="kw">sapply</span>(trials, p_value)</code></pre></div>
+</div>
+<div id="question5" class="section level2">
+<h2>Question5</h2>
+<ul>
+<li>Exercises 6 in page 214 Implement a combination of Map() and vapply() to create an lapply() variant that iterates in parallel over all of its inputs and stores its outputs in a vector (or a matrix). What arguments should the function take?</li>
+</ul>
+</div>
+<div id="answer5" class="section level2">
+<h2>Answer5</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">a =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>), <span class="dt">b =</span> <span class="kw">c</span>(<span class="dv">4</span><span class="op">:</span><span class="dv">8</span>))
+
+lapply.f&lt;-<span class="cf">function</span>(x,f,...){
+   r&lt;-<span class="kw">Map</span>(f,x,...)
+   n&lt;-<span class="kw">length</span>(r[[<span class="dv">1</span>]])
+   <span class="kw">return</span>(<span class="kw">vapply</span>(r,as.vector,<span class="kw">numeric</span>(n)))
+}
+<span class="kw">lapply.f</span>(x,mean)
+<span class="kw">lapply.f</span>(x,quantile)</code></pre></div>
+<div id="section-9" class="section level3">
+<h3>2018.12.14</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(microbenchmark)
+<span class="kw">library</span>(latticeExtra)
+<span class="kw">library</span>(Ball)
+<span class="kw">library</span>(nloptr)</code></pre></div>
+</div>
+</div>
+<div id="question1-7" class="section level2">
+<h2>Question1</h2>
+<ul>
+<li>Exercises 4</li>
+</ul>
+<p>Make a faster version of chisq.test() that only computes the chi-square test statistic when the input is two numeric vectors with no missing values. You can try simplifying chisq.test() or by coding from the mathematical deﬁnition (<a href="http://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test">http://en.wikipedia.org/wiki/Pearson%27s_chi-squared_test</a>).</p>
+</div>
+<div id="answer1-2" class="section level2">
+<h2>Answer1 :</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.chisq.test&lt;-<span class="cf">function</span>(x,y){
+<span class="cf">if</span>(<span class="op">!</span><span class="kw">is.vector</span>(x) <span class="op">&amp;&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.vector</span>(y))
+<span class="kw">stop</span>(<span class="st">&quot;at least one of 'x' and 'y' is not a vector&quot;</span>)
+<span class="cf">if</span>(<span class="kw">typeof</span>(x)<span class="op">==</span><span class="st">&quot;character&quot;</span> <span class="op">||</span><span class="st"> </span><span class="kw">typeof</span>(y)<span class="op">==</span><span class="st">&quot;character&quot;</span>)
+<span class="kw">stop</span>(<span class="st">&quot;at least one of 'x' and 'y' is not a numeric vector&quot;</span>)
+<span class="cf">if</span>(<span class="kw">any</span>(x<span class="op">&lt;</span><span class="dv">0</span>) <span class="op">||</span><span class="st"> </span><span class="kw">anyNA</span>(x)) 
+<span class="kw">stop</span>(<span class="st">&quot;all entries of 'x' must be nonnegative and finite&quot;</span>)
+<span class="cf">if</span>(<span class="kw">any</span>(y<span class="op">&lt;</span><span class="dv">0</span>) <span class="op">||</span><span class="st"> </span><span class="kw">anyNA</span>(y)) 
+<span class="kw">stop</span>(<span class="st">&quot;all entries of 'y' must be nonnegative and finite&quot;</span>)
+<span class="cf">if</span>((n&lt;-<span class="kw">sum</span>(x))<span class="op">==</span><span class="dv">0</span>) 
+<span class="kw">stop</span>(<span class="st">&quot;at least one entry of 'x' must be positive&quot;</span>)
+<span class="cf">if</span>((n&lt;-<span class="kw">sum</span>(x))<span class="op">==</span><span class="dv">0</span>) 
+<span class="kw">stop</span>(<span class="st">&quot;at least one entry of 'x' must be positive&quot;</span>)
+<span class="cf">if</span>(<span class="kw">length</span>(x)<span class="op">!=</span><span class="kw">length</span>(y)) 
+<span class="kw">stop</span>(<span class="st">&quot;'x' and 'y' must have the same length&quot;</span>)
+DNAME&lt;-<span class="kw">paste</span>(<span class="kw">deparse</span>(<span class="kw">substitute</span>(x)),<span class="st">&quot;and&quot;</span>,<span class="kw">deparse</span>(<span class="kw">substitute</span>(y)))
+METHOD&lt;-<span class="st">&quot;Pearson's Chi-squared test&quot;</span>
+x&lt;-<span class="kw">rbind</span>(x,y)
+nr&lt;-<span class="kw">as.integer</span>(<span class="kw">nrow</span>(x));nc&lt;-<span class="kw">as.integer</span>(<span class="kw">ncol</span>(x))
+sr&lt;-<span class="kw">rowSums</span>(x);sc&lt;-<span class="kw">colSums</span>(x);n&lt;-<span class="kw">sum</span>(x)
+E&lt;-<span class="kw">outer</span>(sr,sc,<span class="st">&quot;*&quot;</span>)<span class="op">/</span>n
+STATISTIC&lt;-<span class="kw">sum</span>((x <span class="op">-</span><span class="st"> </span>E)<span class="op">^</span><span class="dv">2</span><span class="op">/</span>E)
+<span class="kw">names</span>(STATISTIC)&lt;-<span class="st">&quot;X-squared&quot;</span>
+<span class="kw">structure</span>(<span class="kw">list</span>(<span class="dt">statistic=</span>STATISTIC,<span class="dt">method=</span>METHOD,<span class="dt">data.name=</span>DNAME),<span class="dt">class=</span><span class="st">&quot;htest&quot;</span>)
+}
+
+<span class="co">#There is an example.</span>
+mya&lt;-<span class="kw">c</span>(<span class="dv">762</span>,<span class="dv">327</span>,<span class="dv">468</span>);myb&lt;-<span class="kw">c</span>(<span class="dv">484</span>,<span class="dv">239</span>,<span class="dv">477</span>)   
+<span class="kw">my.chisq.test</span>(mya,myb)        
+<span class="kw">chisq.test</span>(<span class="kw">rbind</span>(mya,myb))
+<span class="kw">microbenchmark</span>(<span class="dt">t1=</span><span class="kw">my.chisq.test</span>(mya,myb),<span class="dt">t2=</span><span class="kw">chisq.test</span>(<span class="kw">rbind</span>(mya,myb))) </code></pre></div>
+</div>
+<div id="question2-5" class="section level2">
+<h2>Question2</h2>
+<ul>
+<li>Exercises 5</li>
+</ul>
+<p>Can you make a faster version of table() for the case of an input of two integer vectors with no missing values? Can you use it to speed up your chi-square test?</p>
+</div>
+<div id="answer2-3" class="section level2">
+<h2>Answer2</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.table&lt;-<span class="cf">function</span>(...,<span class="dt">dnn =</span> <span class="kw">list.names</span>(...),<span class="dt">deparse.level =</span> <span class="dv">1</span>){
+    list.names &lt;-<span class="st"> </span><span class="cf">function</span>(...) {
+        l &lt;-<span class="st"> </span><span class="kw">as.list</span>(<span class="kw">substitute</span>(<span class="kw">list</span>(...)))[<span class="op">-</span>1L]
+        nm &lt;-<span class="st"> </span><span class="kw">names</span>(l)
+        fixup &lt;-<span class="st"> </span><span class="cf">if</span> (<span class="kw">is.null</span>(nm)) 
+            <span class="kw">seq_along</span>(l)
+        <span class="cf">else</span> nm <span class="op">==</span><span class="st"> &quot;&quot;</span>
+        dep &lt;-<span class="st"> </span><span class="kw">vapply</span>(l[fixup], <span class="cf">function</span>(x) <span class="cf">switch</span>(deparse.level <span class="op">+</span><span class="st"> </span>
+<span class="st">            </span><span class="dv">1</span>, <span class="st">&quot;&quot;</span>, <span class="cf">if</span> (<span class="kw">is.symbol</span>(x)) <span class="kw">as.character</span>(x) <span class="cf">else</span> <span class="st">&quot;&quot;</span>, 
+            <span class="kw">deparse</span>(x, <span class="dt">nlines =</span> <span class="dv">1</span>)[1L]), <span class="st">&quot;&quot;</span>)
+        <span class="cf">if</span> (<span class="kw">is.null</span>(nm)) 
+            dep
+        <span class="cf">else</span> {
+            nm[fixup] &lt;-<span class="st"> </span>dep
+            nm
+        }
+    }
+    args &lt;-<span class="st"> </span><span class="kw">list</span>(...)
+    <span class="cf">if</span> (<span class="op">!</span><span class="kw">length</span>(args)) 
+        <span class="kw">stop</span>(<span class="st">&quot;nothing to tabulate&quot;</span>)
+    <span class="cf">if</span> (<span class="kw">length</span>(args) <span class="op">==</span><span class="st"> </span>1L <span class="op">&amp;&amp;</span><span class="st"> </span><span class="kw">is.list</span>(args[[1L]])) {
+        args &lt;-<span class="st"> </span>args[[1L]]
+        <span class="cf">if</span> (<span class="kw">length</span>(dnn) <span class="op">!=</span><span class="st"> </span><span class="kw">length</span>(args)) 
+            dnn &lt;-<span class="st"> </span><span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(argn &lt;-<span class="st"> </span><span class="kw">names</span>(args))) 
+                argn
+            <span class="cf">else</span> <span class="kw">paste</span>(dnn[1L], <span class="kw">seq_along</span>(args), <span class="dt">sep =</span> <span class="st">&quot;.&quot;</span>)
+    }
+    bin &lt;-<span class="st"> </span>0L
+    lens &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    dims &lt;-<span class="st"> </span><span class="kw">integer</span>()
+    pd &lt;-<span class="st"> </span>1L
+    dn &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    <span class="cf">for</span> (a <span class="cf">in</span> args) {
+        <span class="cf">if</span> (<span class="kw">is.null</span>(lens)) 
+            lens &lt;-<span class="st"> </span><span class="kw">length</span>(a)
+        <span class="cf">else</span> <span class="cf">if</span> (<span class="kw">length</span>(a) <span class="op">!=</span><span class="st"> </span>lens) 
+            <span class="kw">stop</span>(<span class="st">&quot;all arguments must have the same length&quot;</span>)
+        fact.a &lt;-<span class="st"> </span><span class="kw">is.factor</span>(a)
+        <span class="cf">if</span> (<span class="op">!</span>fact.a) {
+            a0 &lt;-<span class="st"> </span>a
+            a &lt;-<span class="st"> </span><span class="kw">factor</span>(a)
+        }
+        ll &lt;-<span class="st"> </span><span class="kw">levels</span>(a)
+        a &lt;-<span class="st"> </span><span class="kw">as.integer</span>(a)
+        nl &lt;-<span class="st"> </span><span class="kw">length</span>(ll)
+        dims &lt;-<span class="st"> </span><span class="kw">c</span>(dims, nl)
+        dn &lt;-<span class="st"> </span><span class="kw">c</span>(dn, <span class="kw">list</span>(ll))
+        bin &lt;-<span class="st"> </span>bin <span class="op">+</span><span class="st"> </span>pd <span class="op">*</span><span class="st"> </span>(a <span class="op">-</span><span class="st"> </span>1L)
+        pd &lt;-<span class="st"> </span>pd <span class="op">*</span><span class="st"> </span>nl
+    }
+    <span class="kw">names</span>(dn) &lt;-<span class="st"> </span>dnn
+    bin &lt;-<span class="st"> </span>bin[<span class="op">!</span><span class="kw">is.na</span>(bin)]
+    <span class="cf">if</span> (<span class="kw">length</span>(bin)) 
+        bin &lt;-<span class="st"> </span>bin <span class="op">+</span><span class="st"> </span>1L
+    y &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="kw">tabulate</span>(bin, pd), dims, <span class="dt">dimnames =</span> dn)
+    <span class="kw">class</span>(y) &lt;-<span class="st"> &quot;table&quot;</span>
+    y
+}
+
+<span class="co">#There is an example.</span>
+mya&lt;-myb&lt;-<span class="kw">c</span>(<span class="dv">1</span>,<span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">4</span>))         
+<span class="kw">my.table</span>(mya,myb)
+<span class="kw">table</span>(mya,myb)
+<span class="kw">microbenchmark</span>(<span class="dt">t1=</span><span class="kw">my.table</span>(mya,myb),<span class="dt">t2=</span><span class="kw">table</span>(mya,myb))   </code></pre></div>
+<p>Thank you for reading.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
